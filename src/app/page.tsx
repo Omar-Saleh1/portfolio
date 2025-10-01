@@ -1,22 +1,28 @@
 'use client'
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import emailjs from "emailjs-com";
 
+interface FormData {
+  name: string;
+  email: string;
+  message: string;
+}
+
 export default function ContactSection() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
     message: "",
   });
 
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState<"" | "success" | "error">("");
 
-  const handleChange = (e: { target: { name: any; value: any; }; }) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const sendEmail = (e: { preventDefault: () => void; }) => {
+  const sendEmail = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     emailjs
@@ -32,7 +38,7 @@ export default function ContactSection() {
       )
       .then(
         () => {
-          setStatus("sucsses");
+          setStatus("success");
           setFormData({ name: "", email: "", message: "" });
         },
         () => {
@@ -86,7 +92,15 @@ export default function ContactSection() {
         >
           Send Message
         </button>
-        {status && <p className="text-center text-sm mt-2">{status}</p>}
+        {status && (
+          <p
+            className={`text-center text-sm mt-2 ${
+              status === "success" ? "text-green-400" : "text-red-400"
+            }`}
+          >
+            {status === "success" ? "Message sent successfully!" : "Failed to send message."}
+          </p>
+        )}
       </form>
     </motion.section>
   );
