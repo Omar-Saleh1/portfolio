@@ -174,7 +174,7 @@ export default function Portfolio() {
               View Projects
             </a>
             <a
-              href="/Omar-CV.pdf"
+              href="\Omar_Abdel Moneim Amin Mahdi_Front-End Developer _resume.pdf"
               download
               className="bg-gray-800 border border-cyan-500 px-4 py-2 rounded-full font-semibold hover:bg-cyan-500 hover:text-black transition"
             >
@@ -216,7 +216,7 @@ export default function Portfolio() {
           <img
             src="/omar.jpg.png"
             alt="Omar Photo"
-            className="w-72 h-100 md:w-80 md:h-[38rem] object-cover rounded-2xl shadow-xl hover:scale-105 hover:shadow-cyan-500/50 transition duration-500 max-w-full"
+              className="w-72 md:w-80 md:h-[36rem] object-cover rounded-2xl shadow-xl border-cyan-500 hover:scale-105 hover:shadow-cyan-500/50 transition duration-500"
           />
         </motion.div>
       </section>
@@ -270,7 +270,7 @@ export default function Portfolio() {
                 See My Work
               </a>
               <a
-                href="/Omar-CV.pdf"
+              href="\Omar_Abdel Moneim Amin Mahdi_Front-End Developer _resume.pdf"
                 download
                 className="border border-cyan-500 px-6 py-3 rounded-full font-semibold hover:bg-cyan-500 hover:text-black transition duration-300"
               >
