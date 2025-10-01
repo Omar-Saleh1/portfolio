@@ -31,11 +31,11 @@ export default function ContactSection() {
       )
       .then(
         () => {
-          setStatus("✅ رسالتك اتبعتت بنجاح!");
+          setStatus("sucsses");
           setFormData({ name: "", email: "", message: "" });
         },
         () => {
-          setStatus("في مشكلة حاول تاني.");
+          setStatus("error");
         }
       );
   };
