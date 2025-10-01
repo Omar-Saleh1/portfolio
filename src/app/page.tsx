@@ -70,14 +70,14 @@ export default function Portfolio() {
 
     emailjs
       .send(
-        "YOUR_SERVICE_ID", // ضع الـ Service ID من EmailJS
-        "YOUR_TEMPLATE_ID", // ضع الـ Template ID من EmailJS
+        "YOUR_SERVICE_ID", 
+        "YOUR_TEMPLATE_ID",
         {
           from_name: formData.name,
           from_email: formData.email,
           message: formData.message,
         },
-        "YOUR_PUBLIC_KEY" // ضع الـ Public Key من EmailJS
+        "YOUR_PUBLIC_KEY" 
       )
       .then(
         () => {
@@ -170,7 +170,7 @@ export default function Portfolio() {
           <div className="flex gap-4 justify-center md:justify-start flex-wrap">
             <a href="#projects" className="bg-cyan-500 hover:bg-cyan-600 px-6 py-2 rounded-full font-semibold">View Projects</a>
             <a
-              href="/Omar_AbdelMoneim_Amin_Front-End_Developer_CV.pdf"
+              href="/Omar_Abdel Moneim Amin Mahdi_Front-End Developer _resume.pdf"
               download
               className="bg-gray-800 border border-cyan-500 px-4 py-2 rounded-full font-semibold hover:bg-cyan-500 hover:text-black transition"
             >
