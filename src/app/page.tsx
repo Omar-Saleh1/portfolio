@@ -174,7 +174,7 @@ export default function Portfolio() {
               View Projects
             </a>
             <a
-              href="\Omar_Abdel Moneim Amin Mahdi_Front-End Developer _resume.pdf"
+              href="/Omar_Abdel Moneim Amin Mahdi_Front-End Developer _resume.pdf"
               download
               className="bg-gray-800 border border-cyan-500 px-4 py-2 rounded-full font-semibold hover:bg-cyan-500 hover:text-black transition"
             >
@@ -270,7 +270,7 @@ export default function Portfolio() {
                 See My Work
               </a>
               <a
-              href="\Omar_Abdel Moneim Amin Mahdi_Front-End Developer _resume.pdf"
+              href="/Omar_Abdel Moneim Amin Mahdi_Front-End Developer _resume.pdf"
                 download
                 className="border border-cyan-500 px-6 py-3 rounded-full font-semibold hover:bg-cyan-500 hover:text-black transition duration-300"
               >
