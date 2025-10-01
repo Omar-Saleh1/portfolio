@@ -51,7 +51,7 @@ export default function Portfolio() {
 
   return (
     <div className="bg-gray-950 text-white scroll-smooth">
-      <title>Omar Abdelmonim</title>
+      <title>Omar Abdelmonim Amin</title>
       {/* Navbar */}
       <motion.nav
         initial={{ y: -100, opacity: 0 }}
