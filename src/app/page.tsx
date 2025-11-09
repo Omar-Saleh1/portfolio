@@ -8,10 +8,27 @@ const projects = [
   {
     title: "E-commerce App",
     description:
-      "An online store with product browsing, shopping cart, secure checkout, and user authentication.",
+    " An interactive real estate website that allows users to browse and filter properties by price, location, and type. Built with React.js Next.j and"
+
+,
     image: "/Ecommerce.jpg.jpg",
     github: "https://github.com/Omar-Saleh1",
     demo: "https://web-ecommerce-ruby.vercel.app/",
+  },
+  {
+    title: "Doctor App",
+   
+    image: "/Screenshot 2025-11-09 103155.png",
+    github: "https://github.com/Omar-Saleh1",
+    demo: "https://doctor-app-sepia.vercel.app/",
+  },
+   {
+    title: "Real State",
+    description:
+      "An online store with product browsing, shopping cart, secure checkout, and user authentication.",
+    image: "/Screenshot 2025-11-09 101403.png",
+    github: "https://github.com/Omar-Saleh1",
+    demo: "https://real-state-one-ashy.vercel.app/",
   },
   {
     title: "Social App",
