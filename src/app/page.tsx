@@ -188,7 +188,7 @@ export default function Portfolio() {
           <div className="flex gap-4 justify-center md:justify-start flex-wrap">
             <a href="#projects" className="bg-cyan-500 hover:bg-cyan-600 px-6 py-2 rounded-full font-semibold">View Projects</a>
             <a
-              href="/Omar_Abdel Moneim Amin Mahdi_Front-End Developer _resume.pdf"
+              href="\Omar_Abdel Moneim Amin Mahdi_Front-End Developer _resume (1).pdf"
               download
               className="bg-gray-800 border border-cyan-500 px-4 py-2 rounded-full font-semibold hover:bg-cyan-500 hover:text-black transition"
             >
@@ -266,7 +266,7 @@ export default function Portfolio() {
 
         {/* Download CV Button */}
         <a
-          href="/Omar_Abdel Moneim Amin Mahdi_Front-End Developer _resume.pdf"
+          href="\Omar_Abdel Moneim Amin Mahdi_Front-End Developer _resume (1).pdf"
           download
           className="border border-cyan-500 px-6 py-3 rounded-full font-semibold hover:bg-cyan-500 hover:text-black transition duration-300"
         >
