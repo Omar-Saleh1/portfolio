@@ -16,8 +16,9 @@ const projects = [
     demo: "https://web-ecommerce-ruby.vercel.app/",
   },
   {
-    title: "Doctor App",
-   
+    title: "Doctor App – Medical Appointment Booking System",
+   description:
+'I developed Doctor App, a platform that allows users to book appointments with doctors based on their medical specialty. The system includes an admin panel for adding and managing doctors, ensuring easy control over all data. The application features a clean interface and a smooth user experience.',
     image: "/Screenshot 2025-11-09 103155.png",
     github: "https://github.com/Omar-Saleh1",
     demo: "https://doctor-app-sepia.vercel.app/",
