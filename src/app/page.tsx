@@ -1,81 +1,368 @@
 "use client";
-import { motion } from "framer-motion";
-import { useState, ChangeEvent, FormEvent } from "react";
-import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
-import emailjs from "emailjs-com";
+import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
+import { useState, useEffect, ChangeEvent, FormEvent, useRef } from "react";
+import { 
+  FaGithub, 
+  FaLinkedin, 
+  FaEnvelope, 
+  FaHtml5, 
+  FaCss3Alt, 
+  FaJs, 
+  FaReact, 
+  FaGitAlt, 
+  FaPaperPlane, 
+  FaCode,
+  FaLightbulb,
+  FaMobileAlt,
+  FaRocket,
+  FaChevronRight
+} from "react-icons/fa";
+import { 
+  SiNextdotjs, 
+  SiTailwindcss, 
+  SiRedux, 
+  SiTypescript 
+} from "react-icons/si";
 
+
+// High-Performance HTML5 Canvas Particles Background with Mouse Interactivity
+function ParticlesBackground() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let animationFrameId: number;
+    let particles: Array<{
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      radius: number;
+    }> = [];
+
+    const mouse = {
+      x: null as number | null,
+      y: null as number | null,
+      radius: 140, // interaction radius
+    };
+
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      initParticles();
+    };
+
+    const initParticles = () => {
+      particles = [];
+      const count = Math.min(Math.floor((canvas.width * canvas.height) / 15000), 100);
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: (Math.random() - 0.5) * 0.4,
+          radius: Math.random() * 2 + 1,
+        });
+      }
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    };
+
+    const handleMouseLeave = () => {
+      mouse.x = null;
+      mouse.y = null;
+    };
+
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "rgba(239, 68, 68, 0.45)"; // red particles
+      ctx.strokeStyle = "rgba(239, 68, 68, 0.05)"; // default lines
+
+      particles.forEach((p, idx) => {
+        // Base movement
+        p.x += p.vx;
+        p.y += p.vy;
+
+        // Bounce margins
+        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+        // Mouse interaction (Repulsion and dynamic connection lines)
+        if (mouse.x !== null && mouse.y !== null) {
+          const dx = p.x - mouse.x;
+          const dy = p.y - mouse.y;
+          const dist = Math.hypot(dx, dy);
+
+          if (dist < mouse.radius) {
+            // Stronger force when mouse is closer
+            const force = (mouse.radius - dist) / mouse.radius;
+            const angle = Math.atan2(dy, dx);
+            
+            // Gently push particles away
+            p.x += Math.cos(angle) * force * 1.5;
+            p.y += Math.sin(angle) * force * 1.5;
+
+            // Draw line to the mouse cursor
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.strokeStyle = `rgba(239, 68, 68, ${0.12 * force})`;
+            ctx.stroke();
+          }
+        }
+
+        // Draw particle node
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Connect near particles with lines
+        ctx.strokeStyle = "rgba(239, 68, 68, 0.05)";
+        for (let j = idx + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+          if (dist < 110) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+          }
+        }
+      });
+
+      animationFrameId = requestAnimationFrame(draw);
+    };
+
+    window.addEventListener("resize", resizeCanvas);
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseleave", handleMouseLeave);
+    
+    resizeCanvas();
+    draw();
+
+    return () => {
+      window.removeEventListener("resize", resizeCanvas);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseleave", handleMouseLeave);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
+  return <canvas ref={canvasRef} className="fixed inset-0 -z-10 pointer-events-none bg-black" />;
+}
+
+// Typewriter Component
+function Typewriter({ words }: { words: string[] }) {
+  const [index, setIndex] = useState(0);
+  const [subIndex, setSubIndex] = useState(0);
+  const [reverse, setReverse] = useState(false);
+  const [text, setText] = useState("");
+  
+  useEffect(() => {
+    if (subIndex === words[index].length + 1 && !reverse) {
+      const timeout = setTimeout(() => setReverse(true), 2000);
+      return () => clearTimeout(timeout);
+    }
+    
+    if (subIndex === 0 && reverse) {
+      setReverse(false);
+      setIndex((prev) => (prev + 1) % words.length);
+      return;
+    }
+    
+    const timeout = setTimeout(() => {
+      setSubIndex((prev) => prev + (reverse ? -1 : 1));
+    }, reverse ? 50 : 100);
+    
+    return () => clearTimeout(timeout);
+  }, [subIndex, reverse, index, words]);
+  
+  useEffect(() => {
+    setText(words[index].substring(0, subIndex));
+  }, [subIndex, index, words]);
+  
+  return (
+    <span className="text-red-500 font-semibold inline-block min-h-[1.2em]">
+      {text}
+      <span className="animate-pulse ml-1 border-r-2 border-red-500"></span>
+    </span>
+  );
+}
+
+// Parallax Interactive Photo Card (Transparent & Frameless)
+function ParallaxPhoto({ src, alt }: { src: string; alt: string }) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  
+  const rotateX = useTransform(y, [-150, 150], [10, -10]);
+  const rotateY = useTransform(x, [-150, 150], [-10, 10]);
+  
+  function handleMouseMove(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left - width / 2;
+    const mouseY = e.clientY - rect.top - height / 2;
+    x.set(mouseX);
+    y.set(mouseY);
+  }
+  
+  function handleMouseLeave() {
+    x.set(0);
+    y.set(0);
+  }
+  
+  return (
+    <motion.div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+      className="relative group w-72 md:w-80 h-[28rem] md:h-[34rem] cursor-pointer"
+    >
+      <div 
+        style={{ transform: "translateZ(20px)" }}
+        className="relative w-full h-full flex items-center justify-center bg-transparent"
+      >
+        <img 
+          src={src} 
+          alt={alt} 
+          className="w-full h-full object-contain object-top transition-transform duration-500 group-hover:scale-[1.02]" 
+        />
+      </div>
+    </motion.div>
+  );
+}
+
+// Skill Section Data
+const skillsData = [
+  { name: "HTML5", icon: FaHtml5, category: "Core Tech", color: "text-orange-500" },
+  { name: "CSS3", icon: FaCss3Alt, category: "Core Tech", color: "text-blue-500" },
+  { name: "JavaScript", icon: FaJs, category: "Core Tech", color: "text-yellow-400" },
+  { name: "TypeScript", icon: SiTypescript, category: "Core Tech", color: "text-blue-400" },
+  { name: "React", icon: FaReact, category: "Frameworks", color: "text-cyan-400" },
+  { name: "Next.js", icon: SiNextdotjs, category: "Frameworks", color: "text-white" },
+  { name: "Tailwind CSS", icon: SiTailwindcss, category: "Frameworks", color: "text-cyan-400" },
+  { name: "Redux", icon: SiRedux, category: "Frameworks", color: "text-purple-500" },
+  { name: "Git & GitHub", icon: FaGitAlt, category: "DevOps/Tools", color: "text-red-500" },
+];
+
+// Project Data
 const projects = [
   {
+    title: "CimaVerse – Cinema Booking App",
+    description: "A premium movie discovery and booking platform featuring trailer playback, seat reservation, and dynamic schedules.",
+    image: "/cimaverse.png",
+    github: "https://github.com/Omar-Saleh1",
+    demo: "https://cinema-booking-app-frontend.vercel.app/",
+    category: "Next.js/React",
+    tags: ["Next.js", "React", "Tailwind CSS", "Booking System", "UI/UX"]
+  },
+  {
+    title: "Plantify – Smart Plant Care App",
+    description: "A premium plant e-commerce and AI-powered diagnosis platform. Shop 500+ plant species, track care schedules, and diagnose plant diseases instantly.",
+    image: "/plantify.png",
+    github: "https://github.com/Omar-Saleh1",
+    demo: "https://plantfiy.vercel.app/",
+    category: "Next.js/React",
+    tags: ["Next.js", "React", "Tailwind CSS", "AI Diagnosis", "E-commerce"]
+  },
+  {
     title: "E-commerce App",
-    description:
-    " An interactive real estate website that allows users to browse and filter properties by price, location, and type. Built with React.js Next.j and"
-
-,
+    description: "An online store with product browsing, shopping cart, secure checkout, and user authentication.",
     image: "/Ecommerce.jpg.jpg",
     github: "https://github.com/Omar-Saleh1",
     demo: "https://web-ecommerce-ruby.vercel.app/",
+    category: "Next.js/React",
+    tags: ["Next.js", "React", "Tailwind CSS", "Redux", "Authentication"]
   },
   {
-    title: "Doctor App – Medical Appointment Booking System",
-   description:
-'I developed Doctor App, a platform that allows users to book appointments with doctors based on their medical specialty. The system includes an admin panel for adding and managing doctors, ensuring easy control over all data. The application features a clean interface and a smooth user experience.',
+    title: "Doctor App – Appointment Booking",
+    description: "A platform allowing medical appointment bookings with specialized doctors, with an admin control dashboard.",
     image: "/Screenshot 2025-11-09 103155.png",
     github: "https://github.com/Omar-Saleh1",
     demo: "https://doctor-app-sepia.vercel.app/",
+    category: "Next.js/React",
+    tags: ["React.js", "Next.js", "Tailwind CSS", "Admin Dashboard", "Context API"]
   },
-   {
-    title: "Real State",
-    description:
-      "An online store with product browsing, shopping cart, secure checkout, and user authentication.",
+  {
+    title: "Real Estate Platform",
+    description: "An interactive real estate website allowing users to search and filter property listings by location, price, and type.",
     image: "/Screenshot 2025-11-09 101403.png",
     github: "https://github.com/Omar-Saleh1",
     demo: "https://real-state-one-ashy.vercel.app/",
+    category: "Next.js/React",
+    tags: ["React.js", "Next.js", "Tailwind CSS", "Filtering", "Responsive UI"]
   },
   {
-    title: "Social App",
-    description:
-      "Linkpost is a social web app built with Vite & React that lets users create profiles, share links, and connect with others easily.",
+    title: "Social App (Linkpost)",
+    description: "A social web app built with Vite and React letting users customize profiles, share links, and easily connect with peers.",
     image: "/SocialApp.jpg.jpg",
     github: "https://github.com/Omar-Saleh1",
     demo: "https://linkpost-iota.vercel.app/",
+    category: "Vite/React",
+    tags: ["Vite", "React.js", "Tailwind CSS", "Social Networking"]
   },
   {
     title: "Weather App",
-    description:
-      "Weather App — A simple web application that provides real-time weather updates by city.",
+    description: "A real-time weather forecasting web application with locations search and responsive dashboard.",
     image: "/weather.jpg.jpg",
     github: "https://github.com/Omar-Saleh1",
     demo: "https://omar-saleh1.github.io/Weather/",
+    category: "Vanilla JS",
+    tags: ["HTML5", "CSS3", "JavaScript", "Weather API", "Local Storage"]
   },
   {
     title: "Bookmarker App",
-    description:
-      "Bookmarker — A simple web app for bookmarking your favorite websites.",
+    description: "A streamlined web client for managing, organizing, and saving favorite website URLs.",
     image: "/BookMark.jpg.jpg",
     github: "https://github.com/Omar-Saleh1",
     demo: "https://omar-saleh1.github.io/bookmark/",
+    category: "Vanilla JS",
+    tags: ["HTML5", "CSS3", "JavaScript", "Local Storage"]
   },
   {
-    title: "Smart Login System App",
-    description:
-      "Smart Login System — A secure web app that enables users to sign up, log in, and manage their accounts.",
+    title: "Smart Login System",
+    description: "A front-end authentication simulation demonstrating secure login, sign up, session management, and routing validations.",
     image: "/SmartSystem.jpg.jpg",
     github: "https://github.com/Omar-Saleh1",
     demo: "https://omar-saleh1.github.io/Smart-System/",
+    category: "Vanilla JS",
+    tags: ["HTML5", "CSS3", "JavaScript", "Validation"]
   },
 ];
 
-// ========== Component ==========
 export default function Portfolio() {
   const [isOpen, setIsOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("All");
+  
+  // Floating Header Scrolled State
+  const [scrolled, setScrolled] = useState(false);
+  
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-  // contact form
+  // contact form state
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     message: "",
   });
-  const [status, setStatus] = useState<"" | "success" | "error">("");
+  const [status, setStatus] = useState<"" | "success" | "error" | "sending">("");
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -83,269 +370,689 @@ export default function Portfolio() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const sendEmail = (e: FormEvent<HTMLFormElement>) => {
+  const sendEmail = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setStatus("sending");
 
-    emailjs
-      .send(
-        "YOUR_SERVICE_ID", 
-        "YOUR_TEMPLATE_ID",
-        {
-          from_name: formData.name,
-          from_email: formData.email,
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          access_key: "974893af-df09-45c7-9e55-89f0ef729b0c",
+          name: formData.name,
+          email: formData.email,
           message: formData.message,
-        },
-        "YOUR_PUBLIC_KEY" 
-      )
-      .then(
-        () => {
-          setStatus("success");
-          setFormData({ name: "", email: "", message: "" });
-        },
-        () => {
-          setStatus("error");
-        }
-      );
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        setStatus("success");
+        setFormData({ name: "", email: "", message: "" });
+        setTimeout(() => setStatus(""), 5000);
+      } else {
+        setStatus("error");
+        setTimeout(() => setStatus(""), 5000);
+      }
+    } catch {
+      setStatus("error");
+      setTimeout(() => setStatus(""), 5000);
+    }
   };
 
-  return (
-    <div className="bg-gray-950 text-white scroll-smooth">
-      <title>Omar Abdelmonim Amin</title>
+  // Unique Categories
+  const categories = ["All", "Next.js/React", "Vite/React", "Vanilla JS"];
+  
+  const filteredProjects = activeTab === "All"
+    ? projects
+    : projects.filter(p => p.category === activeTab);
 
-      {/* Navbar */}
+  return (
+    <div className="relative min-h-screen text-gray-100 bg-grid-pattern selection:bg-red-500/20 selection:text-red-200">
+      
+      {/* Animated Canvas Particles Background */}
+      <ParticlesBackground />
+      
+      {/* Background Ambient Glowing Blobs */}
+      <div className="ambient-blob ambient-red w-[450px] h-[450px] top-[10%] left-[-100px]"></div>
+      <div className="ambient-blob ambient-rose w-[550px] h-[550px] top-[40%] right-[-150px]"></div>
+      <div className="ambient-blob ambient-orange w-[400px] h-[400px] bottom-[15%] left-[20%]"></div>
+
+      {/* Floating Header */}
       <motion.nav
-        initial={{ y: -100, opacity: 0 }}
+        initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8 }}
-        className="fixed top-0 left-0 w-full z-50 bg-gray-900 bg-opacity-70 backdrop-blur-md p-4 shadow-lg"
+        transition={{ duration: 0.6 }}
+        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+          scrolled 
+            ? "py-3 px-4 md:px-8" 
+            : "py-6 px-4 md:px-8"
+        }`}
       >
-        <div className="flex justify-around items-center max-w-7xl mx-auto">
-          <h1 className="text-4xl font-bold tracking-wide">
-            portf<span className="text-cyan-400 text-3xl">olio</span>
-          </h1>
+        <div className={`max-w-6xl mx-auto flex justify-between items-center px-6 py-3 rounded-full transition-all duration-300 ${
+          scrolled 
+            ? "glass-panel border-white/5 shadow-lg shadow-black bg-black/85" 
+            : "border-transparent bg-transparent"
+        }`}>
+          <a href="#home" className="flex items-center gap-1.5 group">
+            <span className="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-red-500 via-rose-500 to-orange-500 bg-clip-text text-transparent group-hover:opacity-85 transition">
+              Omar
+            </span>
+            <span className="text-[7px] tracking-widest px-1.5 py-0.5 rounded-full bg-red-950/60 border border-red-500/40 text-red-500 font-bold uppercase">
+              Dev
+            </span>
+          </a>
 
           {/* Desktop Menu */}
-          <ul className="hidden md:flex gap-6 text-xl items-center justify-center">
-            <li><a href="#home" className="hover:text-cyan-400 transition">Home</a></li>
-            <li><a href="#about" className="hover:text-cyan-400 transition">About</a></li>
-            <li><a href="#skills" className="hover:text-cyan-400 transition">Skills</a></li>
-            <li><a href="#projects" className="hover:text-cyan-400 transition">Projects</a></li>
-            <li><a href="#contact" className="hover:text-cyan-400 transition">Contact</a></li>
-            <a
-              href="#contact"
-              className="border border-cyan-500 px-6 py-2 rounded-full font-semibold hover:bg-cyan-500 hover:text-black transition"
-            >
-              Hire Me
-            </a>
+          <ul className="hidden md:flex gap-6 text-sm font-medium items-center">
+            {["home", "about", "skills", "projects", "contact"].map((item) => (
+              <li key={item}>
+                <a 
+                  href={`#${item}`} 
+                  className="capitalize text-gray-300 hover:text-red-500 transition-colors duration-200"
+                >
+                  {item}
+                </a>
+              </li>
+            ))}
+            <li>
+              <a
+                href="#contact"
+                className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-xs font-semibold rounded-full group bg-gradient-to-br from-red-500 to-rose-600 hover:text-white focus:ring-2 focus:outline-none focus:ring-red-800"
+              >
+                <span className="relative px-4 py-1.5 transition-all ease-in duration-75 bg-black rounded-full group-hover:bg-opacity-0">
+                  Hire Me
+                </span>
+              </a>
+            </li>
           </ul>
 
           {/* Mobile Menu Button */}
-          <button onClick={() => setIsOpen(!isOpen)} className="md:hidden text-2xl">
-            ☰
+          <button 
+            onClick={() => setIsOpen(!isOpen)} 
+            className="md:hidden flex items-center text-xl text-gray-300 hover:text-red-500 p-2 focus:outline-none"
+          >
+            {isOpen ? "✕" : "☰"}
           </button>
         </div>
 
-        {/* Mobile Menu */}
-        {isOpen && (
-          <div className="md:hidden flex flex-col gap-4 mt-4 text-center">
-            <a href="#home" className="hover:text-cyan-400 transition">Home</a>
-            <a href="#about" className="hover:text-cyan-400 transition">About</a>
-            <a href="#skills" className="hover:text-cyan-400 transition">Skills</a>
-            <a href="#projects" className="hover:text-cyan-400 transition">Projects</a>
-            <a href="#contact" className="hover:text-cyan-400 transition">Contact</a>
-            <div className="flex justify-center gap-6 text-xl">
-              <FaGithub className="hover:text-cyan-400" />
-              <FaLinkedin className="hover:text-cyan-400" />
-              <FaEnvelope className="hover:text-cyan-400" />
-            </div>
-            <a
-              href="#contact"
-              className="border border-cyan-500 px-6 py-2 rounded-full font-semibold hover:bg-cyan-500 hover:text-black transition"
+        {/* Mobile Menu Drawer */}
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div 
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="md:hidden glass-panel border-white/5 rounded-2xl mt-2 mx-4 p-5 flex flex-col gap-4 text-center bg-black/95"
             >
-              Hire Me
-            </a>
-          </div>
-        )}
+              {["home", "about", "skills", "projects", "contact"].map((item) => (
+                <a 
+                  key={item} 
+                  href={`#${item}`} 
+                  onClick={() => setIsOpen(false)}
+                  className="capitalize text-gray-300 hover:text-red-500 text-md py-1.5 transition"
+                >
+                  {item}
+                </a>
+              ))}
+              <div className="h-px bg-white/5 my-1"></div>
+              <div className="flex justify-center gap-6 text-lg py-1 text-gray-400">
+                <a href="https://github.com/Omar-Saleh1" target="_blank" rel="noopener noreferrer" className="hover:text-red-500"><FaGithub /></a>
+                <a href="https://www.linkedin.com/in/omar-abdelmoniam-30313b349" target="_blank" rel="noopener noreferrer" className="hover:text-red-500"><FaLinkedin /></a>
+                <a href="mailto:os6100050@gmail.com" className="hover:text-red-500"><FaEnvelope /></a>
+              </div>
+              <a
+                href="#contact"
+                onClick={() => setIsOpen(false)}
+                className="mt-1 bg-gradient-to-r from-red-500 to-rose-600 text-white py-2 rounded-full font-bold shadow-lg"
+              >
+                Hire Me
+              </a>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.nav>
 
       {/* Hero Section */}
       <section
         id="home"
-        className="min-h-screen py-20 flex flex-col md:flex-row justify-center items-center text-center md:text-left gap-12 px-8 bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950"
+        className="relative min-h-screen py-24 flex items-center justify-center px-6 md:px-12 overflow-hidden"
       >
-        <motion.div
-          initial={{ x: -100, opacity: 0 }}
-          whileInView={{ x: 0, opacity: 1 }}
-          transition={{ duration: 1 }}
-          className="space-y-6"
-        >
-          <h2 className="text-5xl font-extrabold">
-            Hi I am <span className="text-cyan-400">Omar</span>
-          </h2>
-          <p className="text-lg text-gray-300 max-w-xl">
-            A passionate <span className="text-cyan-400">Front-End Developer</span> crafting creative and scalable web apps.
-          </p>
-          <div className="flex gap-4 justify-center md:justify-start flex-wrap">
-            <a href="#projects" className="bg-cyan-500 hover:bg-cyan-600 px-6 py-2 rounded-full font-semibold">View Projects</a>
-            <a
-              href="\Omar_Abdel Moneim Amin Mahdi_Front-End Developer _resume.pdf"
-              download
-              className="bg-gray-800 border border-cyan-500 px-4 py-2 rounded-full font-semibold hover:bg-cyan-500 hover:text-black transition"
-            >
-              Download CV
-            </a>
-          </div>
-          <div className="flex gap-4 text-lg">
-            <a href="https://github.com/Omar-Saleh1" target="_blank" rel="noopener noreferrer" className="hover:text-cyan-400 transition"><FaGithub /></a>
-            <a href="https://www.linkedin.com/in/omar-abdelmoniam-30313b349" target="_blank" rel="noopener noreferrer" className="hover:text-cyan-400 transition"><FaLinkedin /></a>
-            <a href="mailto:os6100050@gmail.com" className="hover:text-cyan-400 transition"><FaEnvelope /></a>
-          </div>
-        </motion.div>
+        <div className="max-w-6xl mx-auto w-full grid md:grid-cols-12 gap-12 items-center">
+          
+          {/* Info Details */}
+          <motion.div
+            initial={{ x: -60, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.8 }}
+            className="md:col-span-7 flex flex-col space-y-6 text-left"
+          >
+            {/* Availability Badge */}
+            <div className="inline-flex items-center self-start gap-2 bg-red-950/30 border border-red-800/40 px-3.5 py-1.5 rounded-full text-xs font-semibold text-red-500 tracking-wider">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+              </span>
+              AVAILABLE FOR HIRE
+            </div>
 
-        <motion.div
-          initial={{ x: 100, opacity: 0, scale: 0.9 }}
-          whileInView={{ x: 0, opacity: 1, scale: 1 }}
-          transition={{ duration: 1 }}
-          className="flex justify-center py-10"
-        >
-          <img src="/omar.jpg.png" alt="Omar Photo" className="w-72 md:w-80 md:h-[36rem] object-cover rounded-2xl shadow-xl border-cyan-500 hover:scale-105 hover:shadow-cyan-500/50 transition duration-500" />
-        </motion.div>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
+              Hi, I am <br />
+              <span className="bg-gradient-to-r from-red-500 via-rose-500 to-orange-500 bg-clip-text text-transparent font-black">
+                Omar Abdelmonim
+              </span>
+            </h1>
+
+            <h3 className="text-xl sm:text-2xl text-gray-300">
+              I am a <Typewriter words={["Front-End Developer", "React Specialist", "UI/UX Craftsman"]} />
+            </h3>
+
+            <p className="text-base sm:text-lg text-gray-400 max-w-lg leading-relaxed">
+              I specialize in designing and engineering high-fidelity, interactive, and responsive web platforms. Turning code into beautiful digital art.
+            </p>
+
+            <div className="flex gap-4 items-center flex-wrap pt-2">
+              <a 
+                href="#projects" 
+                className="bg-red-500 hover:bg-red-400 text-black font-bold px-6 py-3 rounded-full shadow-lg shadow-red-500/10 hover:shadow-red-400/30 transition duration-300 flex items-center gap-2 group"
+              >
+                View Work 
+                <FaChevronRight className="text-sm group-hover:translate-x-1 transition-transform" />
+              </a>
+              <a
+                href="/Omar_Abdel Moneim Amin Mahdi_Front-End Developer _resume.pdf"
+                download
+                className="border border-white/10 px-6 py-3 rounded-full font-semibold bg-white/5 hover:bg-white/10 hover:border-white/30 transition duration-300"
+              >
+                Download CV
+              </a>
+            </div>
+
+            {/* Social Connect */}
+            <div className="flex gap-5 text-xl pt-4 text-gray-400">
+              <a href="https://github.com/Omar-Saleh1" target="_blank" rel="noopener noreferrer" className="hover:text-red-500 transition-colors duration-200"><FaGithub /></a>
+              <a href="https://www.linkedin.com/in/omar-abdelmoniam-30313b349" target="_blank" rel="noopener noreferrer" className="hover:text-red-500 transition-colors duration-200"><FaLinkedin /></a>
+              <a href="mailto:os6100050@gmail.com" className="hover:text-red-500 transition-colors duration-200"><FaEnvelope /></a>
+            </div>
+          </motion.div>
+
+          {/* Interactive Profile Frame */}
+          <motion.div
+            initial={{ x: 60, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.8 }}
+            className="md:col-span-5 flex justify-center items-center"
+          >
+            <ParallaxPhoto src="/omar.jpg.png" alt="Omar photo" />
+          </motion.div>
+        </div>
       </section>
 
-      {/* About Section */}
-      {/* About Section */}
-<section
-  id="about"
-  className="min-h-screen flex items-center px-8 py-20 bg-gray-950"
->
-  <div className="container mx-auto grid md:grid-cols-2 gap-12 items-center">
-    <motion.div
-      initial={{ x: -100, opacity: 0 }}
-      whileInView={{ x: 0, opacity: 1 }}
-      transition={{ duration: 1 }}
-      className="flex justify-center"
-    >
-      <img
-        src="/omar.jpg.png"
-        alt="My Photo"
-        className="w-72 md:w-80 md:h-[36rem] object-cover rounded-2xl shadow-xl border-cyan-500 hover:scale-105 hover:shadow-cyan-500/50 transition duration-500"
-      />
-    </motion.div>
-
-    <motion.div
-      initial={{ x: 100, opacity: 0 }}
-      whileInView={{ x: 0, opacity: 1 }}
-      transition={{ duration: 1 }}
-      className="text-gray-300 space-y-6 md:text-left text-center"
-    >
-      <h3 className="text-4xl font-extrabold text-white relative inline-block pb-2">
-        About Me
-        <span className="absolute left-0 bottom-0 w-16 h-1 bg-cyan-400 rounded"></span>
-      </h3>
-      <p className="leading-relaxed text-lg">
-        I am a{" "}
-        <span className="text-cyan-400 font-semibold">Front-End Developer</span>{" "}
-        who loves building{" "}
-        <span className="text-cyan-400">creative</span> and{" "}
-        <span className="text-cyan-400">fast</span> web interfaces.
-      </p>
-      <p className="leading-relaxed text-lg">
-        Outside of coding, I enjoy discovering new tools and turning ideas
-        into interactive experiences.
-      </p>
-
-      {/* Buttons Section */}
-      <div className="flex gap-4 justify-center md:justify-start">
-        {/* Hire Me Button */}
-        <a
-          href="#contact"
-          className="bg-cyan-500 hover:bg-cyan-600 text-black font-semibold px-6 py-3 rounded-full shadow-md transition duration-300"
-        >
-          Hire Me
-        </a>
-
-        {/* Download CV Button */}
-        <a
-          href="\Omar_Abdel Moneim Amin Mahdi_Front-End Developer _resume.pdf"
-          download
-          className="border border-cyan-500 px-6 py-3 rounded-full font-semibold hover:bg-cyan-500 hover:text-black transition duration-300"
-        >
-          Download CV
-        </a>
-      </div>
-    </motion.div>
-  </div>
-</section>
-
-      {/* Skills Section */}
-      <motion.section
-        id="skills"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-        className="min-h-screen flex flex-col justify-center items-center px-6 py-20 bg-gray-900"
-      >
-        <h3 className="text-3xl font-bold mb-12 border-b-4 border-cyan-400 inline-block">Skills</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-10 text-center">
-          {["HTML5", "CSS3", "JavaScript (ES6+)", "React", "Next.js", "Tailwind CSS", "Redux", "Problem Solving"].map((skill) => (
-            <div key={skill} className="bg-gray-800 p-6 rounded-xl shadow-md hover:scale-105 transition">
-              <p className="font-semibold text-cyan-400">{skill}</p>
-            </div>
-          ))}
-        </div>
-      </motion.section>
-
-      {/* Projects Section */}
-      <motion.section
-        id="projects"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-        className="min-h-screen flex flex-col justify-center items-center px-6 py-20"
-      >
-        <h3 className="text-3xl font-bold mb-12 border-b-4 border-cyan-400 inline-block">Projects</h3>
-        <div className="grid md:grid-cols-3 gap-8">
-          {projects.map((project, i) => (
-            <motion.div key={i} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: i * 0.2 }} className="bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:scale-105 transition">
-              <img src={project.image} alt={project.title} className="h-50 w-full object-cover" />
-              <div className="p-6">
-                <h4 className="text-xl font-semibold mb-2">{project.title}</h4>
-                <p className="text-gray-400 mb-4">{project.description}</p>
-                <div className="flex gap-4">
-                  <a href={project.github} target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline">GitHub</a>
-                  <a href={project.demo} target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline">Live Demo</a>
-                </div>
-              </div>
+      {/* Stats Counter Row */}
+      <section className="relative py-12 bg-zinc-950/20 backdrop-blur-[2px] border-y border-white/5">
+        <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          {[
+            { metric: "15+", label: "Projects Completed" },
+            { metric: "2+", label: "Years Experience" },
+            { metric: "100%", label: "Responsive Layouts" },
+            { metric: "10+", label: "Technologies Used" }
+          ].map((stat, idx) => (
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: idx * 0.1 }}
+              viewport={{ once: true }}
+              key={idx}
+              className="space-y-1"
+            >
+              <h4 className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-red-500 to-rose-500 bg-clip-text text-transparent">
+                {stat.metric}
+              </h4>
+              <p className="text-xs md:text-sm text-gray-400 uppercase tracking-widest font-semibold">{stat.label}</p>
             </motion.div>
           ))}
         </div>
-      </motion.section>
+      </section>
+
+      {/* About Section */}
+      <section
+        id="about"
+        className="relative py-24 px-6 md:px-12"
+      >
+        <div className="max-w-6xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-16 space-y-3">
+            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">
+              About <span className="text-red-500">Me</span>
+            </h2>
+            <div className="w-16 h-1 bg-gradient-to-r from-red-500 to-rose-500 mx-auto rounded"></div>
+            <p className="text-gray-400 max-w-xl mx-auto text-sm">
+              Discover who I am, what drives me, and the design principles I carry in every build.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            {/* Visual element */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.7 }}
+              viewport={{ once: true }}
+              className="flex justify-center"
+            >
+              <div className="relative group w-72 md:w-80 h-[28rem] bg-transparent">
+                <img 
+                  src="/omar.jpg.png" 
+                  alt="About me profile" 
+                  className="w-full h-full object-contain object-top transition-transform duration-700 group-hover:scale-[1.02]" 
+                />
+              </div>
+            </motion.div>
+
+            {/* Description Text */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7 }}
+              viewport={{ once: true }}
+              className="space-y-6 text-gray-300 text-left"
+            >
+              <h3 className="text-2xl font-bold text-white">
+                Designing Experiences, Coding Solutions
+              </h3>
+              <p className="leading-relaxed">
+                I am a specialized <span className="text-red-500 font-semibold">Front-End Web Engineer</span> who thrives on translating complex specifications into gorgeous, fluid pixel structures. The interaction, performance, and accessibility of a site are the benchmarks of my creations.
+              </p>
+              <p className="leading-relaxed">
+                Whether creating scalable applications using modern React states, deploying modular styles, or optimizing bundles to score 100% on performance metrics, I build with passion and attention to detail.
+              </p>
+
+              {/* Grid Focus items */}
+              <div className="grid grid-cols-2 gap-4 pt-2">
+                {[
+                  { icon: FaCode, title: "Clean Standards", desc: "Modular, semantic components" },
+                  { icon: FaLightbulb, title: "Modern Stack", desc: "React, Next.js, and ES6+" },
+                  { icon: FaMobileAlt, title: "Fully Responsive", desc: "Fluid layouts on all viewports" },
+                  { icon: FaRocket, title: "Performance", desc: "Fast build bundling and fast page loading" }
+                ].map((item, idx) => (
+                  <div key={idx} className="glass-panel border-white/5 p-3.5 rounded-xl flex flex-col gap-1 hover:border-red-500/20 transition-all duration-300">
+                    <item.icon className="text-red-500 text-lg mb-1" />
+                    <h5 className="font-semibold text-white text-sm">{item.title}</h5>
+                    <p className="text-[11px] text-gray-400 leading-tight">{item.desc}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-4 pt-2">
+                <a
+                  href="#contact"
+                  className="bg-gradient-to-r from-red-500 to-rose-600 text-white font-bold px-6 py-2.5 rounded-full shadow-md hover:shadow-lg hover:brightness-115 transition duration-300"
+                >
+                  Hire Me
+                </a>
+                <a
+                  href="/Omar_Abdel Moneim Amin Mahdi_Front-End Developer _resume.pdf"
+                  download
+                  className="border border-white/10 hover:border-red-500/30 px-6 py-2.5 rounded-full font-semibold transition bg-white/5"
+                >
+                  Download CV
+                </a>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Skills Section */}
+      <section
+        id="skills"
+        className="relative py-24 px-6 md:px-12"
+      >
+        <div className="max-w-6xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-16 space-y-3">
+            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">
+              My <span className="text-red-500">Skills</span>
+            </h2>
+            <div className="w-16 h-1 bg-gradient-to-r from-red-500 to-rose-500 mx-auto rounded"></div>
+            <p className="text-gray-400 max-w-xl mx-auto text-sm">
+              My primary software technologies, libraries, and frameworks representing my core developer toolbox.
+            </p>
+          </div>
+
+          {/* Skills Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-9 gap-4 max-w-5xl mx-auto">
+            {skillsData.map((skill, idx) => {
+              const IconComp = skill.icon;
+              return (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: idx * 0.05 }}
+                  whileHover={{ y: -5 }}
+                  key={idx}
+                  className="glass-panel glass-panel-hover border-white/5 p-4 rounded-2xl flex flex-col items-center justify-center text-center gap-3 shine-border cursor-default"
+                >
+                  <div className={`p-2.5 rounded-xl bg-zinc-900 group-hover:bg-red-950/20 transition-colors ${skill.color}`}>
+                    <IconComp className="text-3xl" />
+                  </div>
+                  <div>
+                    <h5 className="font-semibold text-xs text-white leading-tight">{skill.name}</h5>
+                    <p className="text-[9px] text-gray-500 mt-1 uppercase tracking-wider">{skill.category.split(' ')[0]}</p>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Projects Section */}
+      <section
+        id="projects"
+        className="relative py-24 px-6 md:px-12"
+      >
+        <div className="max-w-6xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-12 space-y-3">
+            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">
+              My <span className="text-red-500">Projects</span>
+            </h2>
+            <div className="w-16 h-1 bg-gradient-to-r from-red-500 to-rose-500 mx-auto rounded"></div>
+            <p className="text-gray-400 max-w-xl mx-auto text-sm">
+              A curated archive of web applications I built, reflecting clean state logic and responsive design.
+            </p>
+          </div>
+
+          {/* Filter Tabs */}
+          <div className="flex justify-center items-center flex-wrap gap-2.5 mb-12 max-w-md mx-auto">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveTab(cat)}
+                className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 border ${
+                  activeTab === cat 
+                    ? "bg-red-500 border-red-500 text-black shadow-md shadow-red-500/10" 
+                    : "border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20 text-gray-300"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          {/* Filterable Grid */}
+          <motion.div 
+            layout 
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-6xl mx-auto"
+          >
+            <AnimatePresence mode="popLayout">
+              {filteredProjects.map((project, idx) => (
+                <motion.div
+                  layout
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.4 }}
+                  key={project.title}
+                  className="group relative flex flex-col h-full rounded-2xl overflow-hidden glass-panel border-white/5 hover:border-red-500/20 transition-all duration-300 hover:shadow-2xl hover:shadow-red-950/10"
+                >
+                  {/* Image Holder */}
+                  <div className="relative h-48 w-full overflow-hidden bg-zinc-950 border-b border-white/5">
+                    <img 
+                      src={project.image} 
+                      alt={project.title} 
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                    />
+                    {/* Hover Link Overlay */}
+                    <div className="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
+                      <a 
+                        href={project.github} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="bg-white/10 hover:bg-white/20 hover:text-red-500 border border-white/20 p-2.5 rounded-full text-lg text-white transition duration-200"
+                        title="View Github Repo"
+                      >
+                        <FaGithub />
+                      </a>
+                      <a 
+                        href={project.demo} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="bg-red-500 hover:bg-red-400 text-black p-2.5 rounded-full text-lg transition duration-200"
+                        title="View Live Site"
+                      >
+                        <FaRocket />
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Body Content */}
+                  <div className="p-5 flex flex-col flex-grow text-left">
+                    <span className="text-[10px] uppercase font-bold tracking-widest text-red-500 mb-1.5 inline-block">
+                      {project.category}
+                    </span>
+                    <h4 className="text-lg font-bold text-white mb-2 leading-tight group-hover:text-red-400 transition duration-200">
+                      {project.title}
+                    </h4>
+                    <p className="text-xs text-gray-400 mb-4 line-clamp-3 leading-relaxed">
+                      {project.description}
+                    </p>
+
+                    {/* Tech Tags */}
+                    <div className="flex flex-wrap gap-1.5 mt-auto">
+                      {project.tags.map((tag, tagIdx) => (
+                        <span 
+                          key={tagIdx} 
+                          className="text-[9px] font-semibold text-gray-400 px-2 py-0.5 rounded-md bg-white/5 border border-white/5"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
+        </div>
+      </section>
 
       {/* Contact Section */}
-      <motion.section
+      <section
         id="contact"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-        className="min-h-screen flex flex-col justify-center items-center px-6 py-20 bg-gray-900"
+        className="relative py-24 px-6 md:px-12"
       >
-        <h3 className="text-3xl font-bold mb-8 border-b-4 border-cyan-400 inline-block">Contact</h3>
-        <form onSubmit={sendEmail} className="w-full max-w-md space-y-4">
-          <input type="text" name="name" placeholder="Your Name" value={formData.name} onChange={handleChange} required className="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 focus:outline-none focus:border-cyan-500"/>
-          <input type="email" name="email" placeholder="Your Email" value={formData.email} onChange={handleChange} required className="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 focus:outline-none focus:border-cyan-500"/>
-          <textarea name="message" placeholder="Your Message" value={formData.message} onChange={handleChange} required className="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 focus:outline-none focus:border-cyan-500"/>
-          <button type="submit" className="w-full bg-cyan-500 hover:bg-cyan-600 text-black font-bold py-3 rounded-lg">Send Message</button>
-          {status && (
-            <p className={`text-center text-sm mt-2 ${status === "success" ? "text-green-400" : "text-red-400"}`}>
-              {status === "success" ? "Message sent successfully! ✅" : "Failed to send message ❌"}
+        <div className="max-w-6xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-16 space-y-3">
+            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">
+              Get In <span className="text-red-500">Touch</span>
+            </h2>
+            <div className="w-16 h-1 bg-gradient-to-r from-red-500 to-rose-500 mx-auto rounded"></div>
+            <p className="text-gray-400 max-w-xl mx-auto text-sm">
+              Have an opening, an interesting project to share, or just want to say hi? Write a note!
             </p>
-          )}
-        </form>
-      </motion.section>
+          </div>
+
+          <div className="grid md:grid-cols-12 gap-12 items-stretch max-w-5xl mx-auto">
+            {/* Quick Details Card */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="md:col-span-5 flex flex-col justify-between glass-panel border-white/5 p-6 md:p-8 rounded-2xl text-left bg-gradient-to-br from-black via-zinc-950 to-black"
+            >
+              <div className="space-y-6">
+                <h4 className="text-xl font-bold text-white mb-2">Contact Information</h4>
+                <p className="text-xs text-gray-400 leading-relaxed">
+                  Feel free to send a message directly using the email client or the secure contact form. I will respond to you within 24 hours.
+                </p>
+
+                <div className="space-y-4 pt-2">
+                  {[
+                    { title: "Direct Mail", value: "os6100050@gmail.com", href: "mailto:os6100050@gmail.com", icon: FaEnvelope },
+                    { title: "LinkedIn Network", value: "Omar Abdelmonim", href: "https://www.linkedin.com/in/omar-abdelmoniam-30313b349", icon: FaLinkedin },
+                    { title: "GitHub Hub", value: "github.com/Omar-Saleh1", href: "https://github.com/Omar-Saleh1", icon: FaGithub }
+                  ].map((info, idx) => (
+                    <a 
+                      href={info.href} 
+                      target="_blank"
+                      rel="noopener noreferrer" 
+                      key={idx} 
+                      className="flex items-center gap-4 group p-2.5 rounded-xl hover:bg-white/5 border border-transparent hover:border-white/5 transition"
+                    >
+                      <div className="p-2.5 rounded-lg bg-zinc-950 border border-white/5 text-red-500 group-hover:text-white transition">
+                        <info.icon className="text-md" />
+                      </div>
+                      <div>
+                        <h6 className="text-[10px] text-gray-400 uppercase tracking-widest font-semibold">{info.title}</h6>
+                        <p className="text-sm font-semibold text-white group-hover:text-red-500 transition-colors">{info.value}</p>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              </div>
+
+              <div className="border-t border-white/5 pt-5 mt-6 text-gray-500 text-xs flex items-center justify-between">
+                <span>Location: Cairo, Egypt</span>
+                <span className="flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                  Glow Zone
+                </span>
+              </div>
+            </motion.div>
+
+            {/* Email Form Panel */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="md:col-span-7 glass-panel border-white/5 p-6 md:p-8 rounded-2xl text-left"
+            >
+              <form onSubmit={sendEmail} className="space-y-6">
+                {/* Floating Inputs Wrapper */}
+                <div className="space-y-4">
+                  <div className="relative z-0 w-full group">
+                    <input 
+                      type="text" 
+                      name="name" 
+                      id="floating_name" 
+                      value={formData.name}
+                      onChange={handleChange}
+                      className="block py-3 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-gray-800 appearance-none focus:outline-none focus:ring-0 focus:border-red-500 peer transition duration-200" 
+                      placeholder=" " 
+                      required 
+                    />
+                    <label 
+                      htmlFor="floating_name" 
+                      className="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-red-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                    >
+                      Your Name
+                    </label>
+                  </div>
+
+                  <div className="relative z-0 w-full group">
+                    <input 
+                      type="email" 
+                      name="email" 
+                      id="floating_email" 
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="block py-3 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-gray-800 appearance-none focus:outline-none focus:ring-0 focus:border-red-500 peer transition duration-200" 
+                      placeholder=" " 
+                      required 
+                    />
+                    <label 
+                      htmlFor="floating_email" 
+                      className="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-red-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                    >
+                      Email Address
+                    </label>
+                  </div>
+
+                  <div className="relative z-0 w-full group">
+                    <textarea 
+                      name="message" 
+                      id="floating_message" 
+                      value={formData.message}
+                      onChange={handleChange}
+                      rows={4}
+                      className="block py-3 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-gray-800 appearance-none focus:outline-none focus:ring-0 focus:border-red-500 peer transition duration-200 resize-none" 
+                      placeholder=" " 
+                      required 
+                    />
+                    <label 
+                      htmlFor="floating_message" 
+                      className="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-red-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                    >
+                      Write your message here...
+                    </label>
+                  </div>
+                </div>
+
+                <button 
+                  type="submit" 
+                  disabled={status === "sending"}
+                  className="w-full bg-red-500 hover:bg-red-400 text-black font-bold py-3 rounded-xl shadow-lg hover:shadow-red-500/20 transition-all flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {status === "sending" ? (
+                    <>
+                      <div className="h-4 w-4 border-2 border-gray-950 border-t-transparent rounded-full animate-spin"></div>
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <FaPaperPlane className="text-sm" />
+                      Send Message
+                    </>
+                  )}
+                </button>
+
+                {/* Notifications feedback */}
+                <AnimatePresence>
+                  {status === "success" && (
+                    <motion.div 
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      className="p-3 text-center text-xs font-semibold rounded-lg bg-red-950/20 border border-red-800/30 text-red-400"
+                    >
+                      Message Sent Successfully! ✅ (Thank you)
+                    </motion.div>
+                  )}
+                  {status === "error" && (
+                    <motion.div 
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      className="p-3 text-center text-xs font-semibold rounded-lg bg-red-950/20 border border-red-800/30 text-red-400"
+                    >
+                      Failed to send message ❌ (Please try direct mail)
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </form>
+            </motion.div>
+          </div>
+        </div>
+      </section>
 
       {/* Footer */}
-      <footer className="text-center py-6 border-t border-gray-800 text-gray-500">
-        © {new Date().getFullYear()} Omar.dev — All Rights Reserved.
+      <footer className="relative text-center py-8 border-t border-white/5 text-gray-500 text-xs">
+        <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p>© {new Date().getFullYear()} Omar Abdelmonim. All Rights Reserved.</p>
+          <div className="flex gap-4">
+            <a href="https://github.com/Omar-Saleh1" target="_blank" rel="noopener noreferrer" className="hover:text-red-500 transition-colors">GitHub</a>
+            <a href="https://www.linkedin.com/in/omar-abdelmoniam-30313b349" target="_blank" rel="noopener noreferrer" className="hover:text-red-500 transition-colors">LinkedIn</a>
+          </div>
+        </div>
       </footer>
     </div>
   );
