@@ -1,5 +1,5 @@
 "use client";
-import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useTransform, Variants } from "framer-motion";
 import { useState, useEffect, ChangeEvent, FormEvent, useRef } from "react";
 import { 
   FaGithub, 
@@ -461,17 +461,20 @@ const skillsContainerVariants = {
   }
 };
 
-const skillItemVariants = {
-  hidden: { opacity: 0, x: -20 },
-  visible: { 
-    opacity: 1, 
+const skillItemVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    x: -20,
+  },
+  visible: {
+    opacity: 1,
     x: 0,
     transition: {
       type: "spring",
       stiffness: 100,
-      damping: 15
-    }
-  }
+      damping: 10,
+    },
+  },
 };
 
 export default function Portfolio() {
