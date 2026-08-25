@@ -15,15 +15,31 @@ import {
   FaLightbulb,
   FaMobileAlt,
   FaRocket,
-  FaChevronRight
+  FaChevronRight,
+  FaNodeJs,
+  FaServer,
+  FaPython,
+  FaBrain,
+  FaDatabase,
+  FaCogs,
+  FaTerminal,
+  FaLayerGroup
 } from "react-icons/fa";
 import { 
   SiNextdotjs, 
   SiTailwindcss, 
   SiRedux, 
-  SiTypescript 
+  SiTypescript,
+  SiExpress,
+  SiMongodb,
+  SiPostgresql,
+  SiDocker,
+  SiPostman,
+  SiNpm,
+  SiCplusplus,
+  SiOpenai
 } from "react-icons/si";
-
+import emailjs from "emailjs-com";
 
 // High-Performance HTML5 Canvas Particles Background with Mouse Interactivity
 function ParticlesBackground() {
@@ -243,107 +259,225 @@ function ParallaxPhoto({ src, alt }: { src: string; alt: string }) {
   );
 }
 
-// Skill Section Data
-const skillsData = [
-  { name: "HTML5", icon: FaHtml5, category: "Core Tech", color: "text-orange-500" },
-  { name: "CSS3", icon: FaCss3Alt, category: "Core Tech", color: "text-blue-500" },
-  { name: "JavaScript", icon: FaJs, category: "Core Tech", color: "text-yellow-400" },
-  { name: "TypeScript", icon: SiTypescript, category: "Core Tech", color: "text-blue-400" },
-  { name: "React", icon: FaReact, category: "Frameworks", color: "text-cyan-400" },
-  { name: "Next.js", icon: SiNextdotjs, category: "Frameworks", color: "text-white" },
-  { name: "Tailwind CSS", icon: SiTailwindcss, category: "Frameworks", color: "text-cyan-400" },
-  { name: "Redux", icon: SiRedux, category: "Frameworks", color: "text-purple-500" },
-  { name: "Git & GitHub", icon: FaGitAlt, category: "DevOps/Tools", color: "text-red-500" },
-];
+// Grouped Skills Data
+const skillsData = {
+  frontend: [
+    { name: "HTML5", icon: FaHtml5, color: "text-orange-500" },
+    { name: "CSS3", icon: FaCss3Alt, color: "text-blue-500" },
+    { name: "JavaScript", icon: FaJs, color: "text-yellow-400" },
+    { name: "TypeScript", icon: SiTypescript, color: "text-blue-400" },
+    { name: "React", icon: FaReact, color: "text-cyan-400" },
+    { name: "Next.js", icon: SiNextdotjs, color: "text-white" },
+    { name: "Tailwind CSS", icon: SiTailwindcss, color: "text-cyan-400" },
+    { name: "Redux Toolkit", icon: SiRedux, color: "text-purple-500" }
+  ],
+  backend: [
+    { name: "Node.js", icon: FaNodeJs, color: "text-green-500" },
+    { name: "Express.js", icon: SiExpress, color: "text-white" },
+    { name: "MongoDB", icon: SiMongodb, color: "text-green-400" },
+    { name: "PostgreSQL", icon: SiPostgresql, color: "text-blue-400" },
+    { name: "REST APIs", icon: FaServer, color: "text-indigo-400" }
+  ],
+  tools: [
+    { name: "Git & GitHub", icon: FaGitAlt, color: "text-red-500" },
+    { name: "Docker", icon: SiDocker, color: "text-sky-400" },
+    { name: "Postman", icon: SiPostman, color: "text-orange-400" },
+    { name: "npm", icon: SiNpm, color: "text-red-500" }
+  ],
+  cs: [
+    { name: "Python", icon: FaPython, color: "text-yellow-400" },
+    { name: "C++", icon: SiCplusplus, color: "text-blue-500" },
+    { name: "Java", icon: FaCode, color: "text-orange-500" },
+    { name: "DSA", icon: FaLayerGroup, color: "text-purple-400" },
+    { name: "DBMS", icon: FaDatabase, color: "text-green-400" },
+    { name: "OOP", icon: FaCogs, color: "text-gray-300" },
+    { name: "System Design", icon: FaServer, color: "text-indigo-400" },
+    { name: "Operating Systems", icon: FaTerminal, color: "text-rose-400" }
+  ],
+  ai: [
+    { name: "Generative AI", icon: SiOpenai, color: "text-emerald-400" },
+    { name: "LLM Integration", icon: FaBrain, color: "text-violet-400" },
+    { name: "Prompt Engineering", icon: FaLightbulb, color: "text-yellow-300" },
+    { name: "Responsive Design", icon: FaMobileAlt, color: "text-cyan-400" }
+  ]
+};
 
 // Project Data
 const projects = [
   {
     title: "CimaVerse – Cinema Booking App",
     description: "A premium movie discovery and booking platform featuring trailer playback, seat reservation, and dynamic schedules.",
+    detailedDescription: "CimaVerse is a complete full-stack cinema booking experience. It features interactive seat maps (with real-time occupancy selection), custom trailer streaming overlay windows, automated booking confirmation records, and responsive schedule filtering. The server manages secure scheduling systems, MongoDB transactions to lock chosen seats during checkout, and REST endpoints for cinema management.",
     image: "/cimaverse.png",
     github: "https://github.com/Omar-Saleh1",
     demo: "https://cinema-booking-app-frontend.vercel.app/",
     category: "Next.js/React",
-    tags: ["Next.js", "React", "Tailwind CSS", "Booking System", "UI/UX"]
+    tags: ["Next.js", "React.js", "Tailwind CSS", "Node.js", "MongoDB", "Express", "REST API", "Booking Logic"]
   },
   {
     title: "Plantify – Smart Plant Care App",
-    description: "A premium plant e-commerce and AI-powered diagnosis platform. Shop 500+ plant species, track care schedules, and diagnose plant diseases instantly.",
+    description: "An e-commerce and smart plant health platform. Shop 500+ plant species, track care schedules, and diagnose plant diseases instantly.",
+    detailedDescription: "Plantify is a full-featured plant care assistant and retail shop. It combines an optimized e-commerce checkout loop (featuring Redux cart synchronization) with smart care scheduling features (e.g. customized watering timers, lighting notifications). It also incorporates a client-side leaf-scanning AI model powered by TensorFlow.js, enabling users to diagnose crop and houseplant leaf diseases instantly via their device camera.",
     image: "/plantify.png",
     github: "https://github.com/Omar-Saleh1",
-    demo: "https://plantfiy.vercel.app/",
+    demo: "https://plantfiy-zk64.vercel.app/",
     category: "Next.js/React",
-    tags: ["Next.js", "React", "Tailwind CSS", "AI Diagnosis", "E-commerce"]
+    tags: ["Next.js", "React.js", "Tailwind CSS", "TensorFlow.js (AI)", "Redux Toolkit", "Local Storage", "E-commerce"]
   },
   {
     title: "E-commerce App",
-    description: "An online store with product browsing, shopping cart, secure checkout, and user authentication.",
+    description: "A high-performance online store with product browsing, shopping cart, secure checkout, and user authentication.",
+    detailedDescription: "A fully realized full-stack e-commerce environment. It includes secure JSON Web Token (JWT) user authentication, dynamic categorization and filtering engines, a centralized Redux state cart, and integrated sandbox Stripe API payments. A comprehensive admin dashboard allows owners to track orders, manage active inventories, and inspect sales charts.",
     image: "/Ecommerce.jpg.jpg",
     github: "https://github.com/Omar-Saleh1",
     demo: "https://web-ecommerce-ruby.vercel.app/",
     category: "Next.js/React",
-    tags: ["Next.js", "React", "Tailwind CSS", "Redux", "Authentication"]
+    tags: ["Next.js", "React.js", "Tailwind CSS", "Redux Toolkit", "Node.js", "Express", "JWT Auth", "Stripe API"]
   },
   {
     title: "Doctor App – Appointment Booking",
-    description: "A platform allowing medical appointment bookings with specialized doctors, with an admin control dashboard.",
+    description: "A medical scheduling platform connecting patients with specialists, including a full-featured admin management panel.",
+    detailedDescription: "Doctor App is a scheduling hub for healthcare specialists. Patients can filter registered doctors by medical specialty, inspect slot availabilities, and request direct bookings. An advanced administrative control portal allows clinics to approve appointment times, manage doctor registers, and update working hours.",
     image: "/Screenshot 2025-11-09 103155.png",
     github: "https://github.com/Omar-Saleh1",
     demo: "https://doctor-app-sepia.vercel.app/",
     category: "Next.js/React",
-    tags: ["React.js", "Next.js", "Tailwind CSS", "Admin Dashboard", "Context API"]
+    tags: ["React.js", "Next.js", "Tailwind CSS", "Admin Dashboard", "Context API", "REST APIs"]
   },
   {
     title: "Real Estate Platform",
-    description: "An interactive real estate website allowing users to search and filter property listings by location, price, and type.",
+    description: "An interactive real estate website allowing users to browse and filter property listings by price, location, and type.",
+    detailedDescription: "A clean listings client built for real estate brokerages. It features high-fidelity map integration, multi-factor filtering (such as location radius, building type, price, and rooms), agent communication portals, and support for high-resolution photo galleries.",
     image: "/Screenshot 2025-11-09 101403.png",
     github: "https://github.com/Omar-Saleh1",
     demo: "https://real-state-one-ashy.vercel.app/",
     category: "Next.js/React",
-    tags: ["React.js", "Next.js", "Tailwind CSS", "Filtering", "Responsive UI"]
+    tags: ["React.js", "Next.js", "Tailwind CSS", "Map APIs", "Search Filters", "Responsive Design"]
   },
   {
     title: "Social App (Linkpost)",
-    description: "A social web app built with Vite and React letting users customize profiles, share links, and easily connect with peers.",
+    description: "Linkpost is a social web app built with Vite & React that lets users create profiles, share links, and connect with others easily.",
+    detailedDescription: "Linkpost is a micro-profile creator similar to Linktree but with social timelines. Users can sign up, choose custom layouts, add social URLs, and broadcast posts. It focuses on clean reactive layouts and fast local data handling.",
     image: "/SocialApp.jpg.jpg",
     github: "https://github.com/Omar-Saleh1",
     demo: "https://linkpost-iota.vercel.app/",
     category: "Vite/React",
-    tags: ["Vite", "React.js", "Tailwind CSS", "Social Networking"]
+    tags: ["Vite", "React.js", "Tailwind CSS", "User Profiles", "Interactive Grid"]
   },
   {
     title: "Weather App",
-    description: "A real-time weather forecasting web application with locations search and responsive dashboard.",
+    description: "A clean web application providing real-time weather details and forecasts by city.",
+    detailedDescription: "Weather App retrieves current coordinates and weather data (including humidity, wind vector, UV values, and a 7-day forecast) using OpenWeatherMap REST endpoints. Includes dynamic UI animations where the background shifts matching the search city's actual time and climate conditions.",
     image: "/weather.jpg.jpg",
     github: "https://github.com/Omar-Saleh1",
     demo: "https://omar-saleh1.github.io/Weather/",
     category: "Vanilla JS",
-    tags: ["HTML5", "CSS3", "JavaScript", "Weather API", "Local Storage"]
+    tags: ["HTML5", "CSS3", "JavaScript", "Weather API", "Dynamic Backgrounds"]
   },
   {
     title: "Bookmarker App",
     description: "A streamlined web client for managing, organizing, and saving favorite website URLs.",
+    detailedDescription: "A lightweight URL bookmarker designed for organizing websites. It features URL validation checks, real-time catalog search filtering, favicon retrieval, and persistent browser storage.",
     image: "/BookMark.jpg.jpg",
     github: "https://github.com/Omar-Saleh1",
     demo: "https://omar-saleh1.github.io/bookmark/",
     category: "Vanilla JS",
-    tags: ["HTML5", "CSS3", "JavaScript", "Local Storage"]
+    tags: ["HTML5", "CSS3", "JavaScript", "Local Storage", "Regex Validation"]
   },
   {
     title: "Smart Login System",
     description: "A front-end authentication simulation demonstrating secure login, sign up, session management, and routing validations.",
+    detailedDescription: "A client-side security demo showcasing login validations, signup credential constraints, session states, and protected client-side routes.",
     image: "/SmartSystem.jpg.jpg",
     github: "https://github.com/Omar-Saleh1",
     demo: "https://omar-saleh1.github.io/Smart-System/",
     category: "Vanilla JS",
-    tags: ["HTML5", "CSS3", "JavaScript", "Validation"]
+    tags: ["HTML5", "CSS3", "JavaScript", "Validation", "Local Storage"]
   },
 ];
+
+// Count-up Animation Hook
+function useCountUp(target: number, duration: number = 1500, start: boolean = false) {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!start) return;
+    let startTime: number | null = null;
+    const step = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      // Ease out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.floor(eased * target));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [target, duration, start]);
+
+  return count;
+}
+
+// Stat Item with Count-up
+function StatItem({ target, suffix, label, delay }: { target: number; suffix: string; label: string; delay: number }) {
+  const [inView, setInView] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setInView(true); observer.disconnect(); } },
+      { threshold: 0.5 }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+
+  const count = useCountUp(target, 1500, inView);
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay }}
+      viewport={{ once: true }}
+      className="space-y-1"
+    >
+      <h4 className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-red-500 to-rose-500 bg-clip-text text-transparent">
+        {count}{suffix}
+      </h4>
+      <p className="text-xs md:text-sm text-gray-400 uppercase tracking-widest font-semibold">{label}</p>
+    </motion.div>
+  );
+}
+
+// Animation variants for Staggered Skills entering viewport
+const skillsContainerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.05,
+    }
+  }
+};
+
+const skillItemVariants = {
+  hidden: { opacity: 0, x: -20 },
+  visible: { 
+    opacity: 1, 
+    x: 0,
+    transition: {
+      type: "spring",
+      stiffness: 100,
+      damping: 15
+    }
+  }
+};
 
 export default function Portfolio() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("All");
+  const [selectedProject, setSelectedProject] = useState<typeof projects[number] | null>(null);
   
   // Floating Header Scrolled State
   const [scrolled, setScrolled] = useState(false);
@@ -370,36 +504,32 @@ export default function Portfolio() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const sendEmail = async (e: FormEvent<HTMLFormElement>) => {
+  const sendEmail = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus("sending");
 
-    try {
-      const res = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          access_key: "974893af-df09-45c7-9e55-89f0ef729b0c",
-          name: formData.name,
-          email: formData.email,
+    emailjs
+      .send(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || "YOUR_SERVICE_ID", 
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || "YOUR_TEMPLATE_ID",
+        {
+          from_name: formData.name,
+          from_email: formData.email,
           message: formData.message,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (data.success) {
-        setStatus("success");
-        setFormData({ name: "", email: "", message: "" });
-        setTimeout(() => setStatus(""), 5000);
-      } else {
-        setStatus("error");
-        setTimeout(() => setStatus(""), 5000);
-      }
-    } catch {
-      setStatus("error");
-      setTimeout(() => setStatus(""), 5000);
-    }
+        },
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || "YOUR_PUBLIC_KEY" 
+      )
+      .then(
+        () => {
+          setStatus("success");
+          setFormData({ name: "", email: "", message: "" });
+          setTimeout(() => setStatus(""), 5000);
+        },
+        () => {
+          setStatus("error");
+          setTimeout(() => setStatus(""), 5000);
+        }
+      );
   };
 
   // Unique Categories
@@ -546,11 +676,11 @@ export default function Portfolio() {
             </h1>
 
             <h3 className="text-xl sm:text-2xl text-gray-300">
-              I am a <Typewriter words={["Front-End Developer", "React Specialist", "UI/UX Craftsman"]} />
+              I am a <Typewriter words={["Full-Stack Developer", "React & Node Specialist", "Database Designer"]} />
             </h3>
 
             <p className="text-base sm:text-lg text-gray-400 max-w-lg leading-relaxed">
-              I specialize in designing and engineering high-fidelity, interactive, and responsive web platforms. Turning code into beautiful digital art.
+              I design and engineer responsive web applications from client components to backend APIs. Bridging design elegance with server-side performance.
             </p>
 
             <div className="flex gap-4 items-center flex-wrap pt-2">
@@ -593,26 +723,10 @@ export default function Portfolio() {
       {/* Stats Counter Row */}
       <section className="relative py-12 bg-zinc-950/20 backdrop-blur-[2px] border-y border-white/5">
         <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-          {[
-            { metric: "15+", label: "Projects Completed" },
-            { metric: "2+", label: "Years Experience" },
-            { metric: "100%", label: "Responsive Layouts" },
-            { metric: "10+", label: "Technologies Used" }
-          ].map((stat, idx) => (
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-              viewport={{ once: true }}
-              key={idx}
-              className="space-y-1"
-            >
-              <h4 className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-red-500 to-rose-500 bg-clip-text text-transparent">
-                {stat.metric}
-              </h4>
-              <p className="text-xs md:text-sm text-gray-400 uppercase tracking-widest font-semibold">{stat.label}</p>
-            </motion.div>
-          ))}
+          <StatItem target={15} suffix="+" label="Projects Completed" delay={0} />
+          <StatItem target={2} suffix="+" label="Years Experience" delay={0.1} />
+          <StatItem target={100} suffix="%" label="Responsive Layouts" delay={0.2} />
+          <StatItem target={12} suffix="+" label="Core Technologies" delay={0.3} />
         </div>
       </section>
 
@@ -629,7 +743,7 @@ export default function Portfolio() {
             </h2>
             <div className="w-16 h-1 bg-gradient-to-r from-red-500 to-rose-500 mx-auto rounded"></div>
             <p className="text-gray-400 max-w-xl mx-auto text-sm">
-              Discover who I am, what drives me, and the design principles I carry in every build.
+              Discover who I am, my development focus, and the code standards I deliver.
             </p>
           </div>
 
@@ -660,22 +774,22 @@ export default function Portfolio() {
               className="space-y-6 text-gray-300 text-left"
             >
               <h3 className="text-2xl font-bold text-white">
-                Designing Experiences, Coding Solutions
+                Designing Experiences, Architecting Systems
               </h3>
               <p className="leading-relaxed">
-                I am a specialized <span className="text-red-500 font-semibold">Front-End Web Engineer</span> who thrives on translating complex specifications into gorgeous, fluid pixel structures. The interaction, performance, and accessibility of a site are the benchmarks of my creations.
+                I am a specialized <span className="text-red-500 font-semibold">Full-Stack Web Developer</span> bridging front-end aesthetics with back-end architectures. I build dynamic client interfaces using React/Next.js alongside robust Node.js / Express servers and performant database configurations (MongoDB, PostgreSQL).
               </p>
               <p className="leading-relaxed">
-                Whether creating scalable applications using modern React states, deploying modular styles, or optimizing bundles to score 100% on performance metrics, I build with passion and attention to detail.
+                Whether organizing data models, structuring secure JWT token authentication workflows, deploying RESTful APIs, or optimizing Next.js server-side loading speed, I maintain clean, modular coding standards.
               </p>
 
               {/* Grid Focus items */}
               <div className="grid grid-cols-2 gap-4 pt-2">
                 {[
-                  { icon: FaCode, title: "Clean Standards", desc: "Modular, semantic components" },
-                  { icon: FaLightbulb, title: "Modern Stack", desc: "React, Next.js, and ES6+" },
-                  { icon: FaMobileAlt, title: "Fully Responsive", desc: "Fluid layouts on all viewports" },
-                  { icon: FaRocket, title: "Performance", desc: "Fast build bundling and fast page loading" }
+                  { icon: FaCode, title: "Clean Architecture", desc: "Modular backend & client systems" },
+                  { icon: FaServer, title: "Robust Backend", desc: "Node, Express & Database models" },
+                  { icon: FaMobileAlt, title: "Responsive UIs", desc: "Fluid layouts on all viewports" },
+                  { icon: FaRocket, title: "Optimized Speed", desc: "Fast API calls & lightweight scripts" }
                 ].map((item, idx) => (
                   <div key={idx} className="glass-panel border-white/5 p-3.5 rounded-xl flex flex-col gap-1 hover:border-red-500/20 transition-all duration-300">
                     <item.icon className="text-red-500 text-lg mb-1" />
@@ -719,34 +833,163 @@ export default function Portfolio() {
             </h2>
             <div className="w-16 h-1 bg-gradient-to-r from-red-500 to-rose-500 mx-auto rounded"></div>
             <p className="text-gray-400 max-w-xl mx-auto text-sm">
-              My primary software technologies, libraries, and frameworks representing my core developer toolbox.
+              My structured software toolbox categorized from client design to database and back-end logic.
             </p>
           </div>
 
-          {/* Skills Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-9 gap-4 max-w-5xl mx-auto">
-            {skillsData.map((skill, idx) => {
-              const IconComp = skill.icon;
-              return (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: idx * 0.05 }}
-                  whileHover={{ y: -5 }}
-                  key={idx}
-                  className="glass-panel glass-panel-hover border-white/5 p-4 rounded-2xl flex flex-col items-center justify-center text-center gap-3 shine-border cursor-default"
-                >
-                  <div className={`p-2.5 rounded-xl bg-zinc-900 group-hover:bg-red-950/20 transition-colors ${skill.color}`}>
-                    <IconComp className="text-3xl" />
-                  </div>
-                  <div>
-                    <h5 className="font-semibold text-xs text-white leading-tight">{skill.name}</h5>
-                    <p className="text-[9px] text-gray-500 mt-1 uppercase tracking-wider">{skill.category.split(' ')[0]}</p>
-                  </div>
-                </motion.div>
-              );
-            })}
+          {/* Grouped Skills Columns - Row 1 */}
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-8">
+
+            {/* Frontend Column */}
+            <div className="space-y-4">
+              <h4 className="text-sm font-bold text-red-500 border-b border-red-500/20 pb-2 uppercase tracking-widest text-left">
+                🖥️ Frontend Tech
+              </h4>
+              <motion.div 
+                variants={skillsContainerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-50px" }}
+                className="grid grid-cols-2 gap-3"
+              >
+                {skillsData.frontend.map((skill, idx) => {
+                  const IconComp = skill.icon;
+                  return (
+                    <motion.div
+                      variants={skillItemVariants}
+                      whileHover={{ y: -3 }}
+                      key={idx}
+                      className="glass-panel glass-panel-hover border-white/5 p-3 rounded-xl flex items-center gap-2.5 shine-border cursor-default text-left"
+                    >
+                      <IconComp className={`text-xl shrink-0 ${skill.color}`} />
+                      <span className="font-semibold text-xs text-white leading-tight">{skill.name}</span>
+                    </motion.div>
+                  );
+                })}
+              </motion.div>
+            </div>
+
+            {/* Backend Column */}
+            <div className="space-y-4">
+              <h4 className="text-sm font-bold text-red-500 border-b border-red-500/20 pb-2 uppercase tracking-widest text-left">
+                ⚙️ Backend & Database
+              </h4>
+              <motion.div 
+                variants={skillsContainerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-50px" }}
+                className="grid grid-cols-2 gap-3"
+              >
+                {skillsData.backend.map((skill, idx) => {
+                  const IconComp = skill.icon;
+                  return (
+                    <motion.div
+                      variants={skillItemVariants}
+                      whileHover={{ y: -3 }}
+                      key={idx}
+                      className="glass-panel glass-panel-hover border-white/5 p-3 rounded-xl flex items-center gap-2.5 shine-border cursor-default text-left"
+                    >
+                      <IconComp className={`text-xl shrink-0 ${skill.color}`} />
+                      <span className="font-semibold text-xs text-white leading-tight">{skill.name}</span>
+                    </motion.div>
+                  );
+                })}
+              </motion.div>
+            </div>
+
+            {/* Tools Column */}
+            <div className="space-y-4">
+              <h4 className="text-sm font-bold text-red-500 border-b border-red-500/20 pb-2 uppercase tracking-widest text-left">
+                🛠️ Tools & Operations
+              </h4>
+              <motion.div 
+                variants={skillsContainerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-50px" }}
+                className="grid grid-cols-2 gap-3"
+              >
+                {skillsData.tools.map((skill, idx) => {
+                  const IconComp = skill.icon;
+                  return (
+                    <motion.div
+                      variants={skillItemVariants}
+                      whileHover={{ y: -3 }}
+                      key={idx}
+                      className="glass-panel glass-panel-hover border-white/5 p-3 rounded-xl flex items-center gap-2.5 shine-border cursor-default text-left"
+                    >
+                      <IconComp className={`text-xl shrink-0 ${skill.color}`} />
+                      <span className="font-semibold text-xs text-white leading-tight">{skill.name}</span>
+                    </motion.div>
+                  );
+                })}
+              </motion.div>
+            </div>
+          </div>
+
+          {/* Grouped Skills Columns - Row 2 */}
+          <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+
+            {/* CS Fundamentals Column */}
+            <div className="space-y-4">
+              <h4 className="text-sm font-bold text-red-500 border-b border-red-500/20 pb-2 uppercase tracking-widest text-left">
+                📚 CS Fundamentals
+              </h4>
+              <motion.div 
+                variants={skillsContainerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-50px" }}
+                className="grid grid-cols-2 sm:grid-cols-4 gap-3"
+              >
+                {skillsData.cs.map((skill, idx) => {
+                  const IconComp = skill.icon;
+                  return (
+                    <motion.div
+                      variants={skillItemVariants}
+                      whileHover={{ y: -3 }}
+                      key={idx}
+                      className="glass-panel glass-panel-hover border-white/5 p-3 rounded-xl flex flex-col items-center justify-center gap-2 shine-border cursor-default text-center"
+                    >
+                      <IconComp className={`text-2xl ${skill.color}`} />
+                      <span className="font-semibold text-[10px] text-white leading-tight">{skill.name}</span>
+                    </motion.div>
+                  );
+                })}
+              </motion.div>
+            </div>
+
+            {/* AI & Modern Integration Column */}
+            <div className="space-y-4">
+              <h4 className="text-sm font-bold text-red-500 border-b border-red-500/20 pb-2 uppercase tracking-widest text-left">
+                🤖 AI & Modern Integration
+              </h4>
+              <p className="text-[10px] text-gray-500 uppercase tracking-widest mb-2">4 Specializations</p>
+              <motion.div 
+                variants={skillsContainerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-50px" }}
+                className="grid grid-cols-2 gap-3"
+              >
+                {skillsData.ai.map((skill, idx) => {
+                  const IconComp = skill.icon;
+                  return (
+                    <motion.div
+                      variants={skillItemVariants}
+                      whileHover={{ y: -3, scale: 1.02 }}
+                      key={idx}
+                      className="relative glass-panel glass-panel-hover border-violet-500/10 hover:border-violet-500/30 p-4 rounded-xl flex flex-col items-center justify-center gap-2 shine-border cursor-default text-center overflow-hidden"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-br from-violet-950/20 to-transparent rounded-xl pointer-events-none"></div>
+                      <IconComp className={`text-2xl relative z-10 ${skill.color}`} />
+                      <span className="font-bold text-[11px] text-white relative z-10 leading-tight">{skill.name}</span>
+                    </motion.div>
+                  );
+                })}
+              </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -764,7 +1007,7 @@ export default function Portfolio() {
             </h2>
             <div className="w-16 h-1 bg-gradient-to-r from-red-500 to-rose-500 mx-auto rounded"></div>
             <p className="text-gray-400 max-w-xl mx-auto text-sm">
-              A curated archive of web applications I built, reflecting clean state logic and responsive design.
+              A curated archive of web applications I built. Click any card to see a detailed technical description.
             </p>
           </div>
 
@@ -799,7 +1042,8 @@ export default function Portfolio() {
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.4 }}
                   key={project.title}
-                  className="group relative flex flex-col h-full rounded-2xl overflow-hidden glass-panel border-white/5 hover:border-red-500/20 transition-all duration-300 hover:shadow-2xl hover:shadow-red-950/10"
+                  onClick={() => setSelectedProject(project)}
+                  className="group relative flex flex-col h-full rounded-2xl overflow-hidden glass-panel border-white/5 hover:border-red-500/20 transition-all duration-300 hover:shadow-2xl hover:shadow-red-950/10 cursor-pointer"
                 >
                   {/* Image Holder */}
                   <div className="relative h-48 w-full overflow-hidden bg-zinc-950 border-b border-white/5">
@@ -809,25 +1053,28 @@ export default function Portfolio() {
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" 
                     />
                     {/* Hover Link Overlay */}
-                    <div className="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
-                      <a 
-                        href={project.github} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="bg-white/10 hover:bg-white/20 hover:text-red-500 border border-white/20 p-2.5 rounded-full text-lg text-white transition duration-200"
-                        title="View Github Repo"
-                      >
-                        <FaGithub />
-                      </a>
-                      <a 
-                        href={project.demo} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="bg-red-500 hover:bg-red-400 text-black p-2.5 rounded-full text-lg transition duration-200"
-                        title="View Live Site"
-                      >
-                        <FaRocket />
-                      </a>
+                    <div className="absolute inset-0 bg-black/85 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-2">
+                      <span className="text-[10px] font-bold text-red-500 tracking-wider">CLICK TO VIEW DETAILS</span>
+                      <div className="flex gap-4 mt-2" onClick={(e) => e.stopPropagation()}>
+                        <a 
+                          href={project.github} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="bg-white/10 hover:bg-white/20 hover:text-red-500 border border-white/20 p-2.5 rounded-full text-lg text-white transition duration-200"
+                          title="View Github Repo"
+                        >
+                          <FaGithub />
+                        </a>
+                        <a 
+                          href={project.demo} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="bg-red-500 hover:bg-red-400 text-black p-2.5 rounded-full text-lg transition duration-200"
+                          title="View Live Site"
+                        >
+                          <FaRocket />
+                        </a>
+                      </div>
                     </div>
                   </div>
 
@@ -845,7 +1092,7 @@ export default function Portfolio() {
 
                     {/* Tech Tags */}
                     <div className="flex flex-wrap gap-1.5 mt-auto">
-                      {project.tags.map((tag, tagIdx) => (
+                      {project.tags.slice(0, 3).map((tag, tagIdx) => (
                         <span 
                           key={tagIdx} 
                           className="text-[9px] font-semibold text-gray-400 px-2 py-0.5 rounded-md bg-white/5 border border-white/5"
@@ -853,6 +1100,11 @@ export default function Portfolio() {
                           {tag}
                         </span>
                       ))}
+                      {project.tags.length > 3 && (
+                        <span className="text-[9px] font-semibold text-red-500 px-2 py-0.5 rounded-md bg-red-950/20 border border-red-500/20">
+                          +{project.tags.length - 3} more
+                        </span>
+                      )}
                     </div>
                   </div>
                 </motion.div>
@@ -861,6 +1113,99 @@ export default function Portfolio() {
           </motion.div>
         </div>
       </section>
+
+      {/* Project Details Modal */}
+      <AnimatePresence>
+        {selectedProject && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md"
+            onClick={() => setSelectedProject(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 30 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 30 }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="relative w-full max-w-2xl overflow-y-auto max-h-[90vh] rounded-3xl glass-panel border-white/10 bg-zinc-950 p-6 md:p-8 flex flex-col gap-6"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setSelectedProject(null)}
+                className="absolute top-5 right-5 text-gray-400 hover:text-red-500 text-xl w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 transition"
+              >
+                ✕
+              </button>
+              
+              {/* Project Image */}
+              <div className="relative h-48 sm:h-64 w-full rounded-2xl overflow-hidden border border-white/5 bg-black mt-2">
+                <img 
+                  src={selectedProject.image} 
+                  alt={selectedProject.title} 
+                  className="w-full h-full object-cover" 
+                />
+              </div>
+              
+              {/* Content details */}
+              <div className="text-left space-y-4">
+                <div>
+                  <span className="text-[10px] uppercase font-bold tracking-widest text-red-500 mb-1 inline-block">
+                    {selectedProject.category}
+                  </span>
+                  <h3 className="text-2xl font-black text-white leading-tight">
+                    {selectedProject.title}
+                  </h3>
+                </div>
+
+                <div className="h-px bg-white/5"></div>
+                
+                <div className="space-y-3">
+                  <h5 className="text-xs uppercase tracking-widest font-bold text-gray-400">Technical Overview</h5>
+                  <p className="text-sm text-gray-300 leading-relaxed font-light">
+                    {selectedProject.detailedDescription}
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  <h5 className="text-xs uppercase tracking-widest font-bold text-gray-400">Stack & Architecture</h5>
+                  <div className="flex flex-wrap gap-1.5">
+                    {selectedProject.tags.map((tag) => (
+                      <span key={tag} className="text-[10px] font-semibold text-gray-300 px-3 py-1 rounded-full bg-white/5 border border-white/5">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="h-px bg-white/5 pt-2"></div>
+                
+                {/* Modal Links */}
+                <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                  <a
+                    href={selectedProject.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold py-3 rounded-xl transition flex items-center justify-center gap-2 text-sm"
+                  >
+                    <FaGithub /> GitHub Repository
+                  </a>
+                  <a
+                    href={selectedProject.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 bg-red-500 hover:bg-red-400 text-black font-bold py-3 rounded-xl transition flex items-center justify-center gap-2 text-sm"
+                  >
+                    <FaRocket /> Launch Live Project
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Contact Section */}
       <section
