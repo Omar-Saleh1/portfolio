@@ -695,7 +695,7 @@ export default function Portfolio() {
                 <FaChevronRight className="text-sm group-hover:translate-x-1 transition-transform" />
               </a>
               <a
-                href="/Omar_Abdel Moneim Amin Mahdi_Front-End Developer _resume.pdf"
+                href="/Omar_Abdelmoneim_Full_Stack_Developer_resume.pdf"
                 download
                 className="border border-white/10 px-6 py-3 rounded-full font-semibold bg-white/5 hover:bg-white/10 hover:border-white/30 transition duration-300"
               >
@@ -811,7 +811,7 @@ export default function Portfolio() {
                   Hire Me
                 </a>
                 <a
-                  href="/Omar_Abdel Moneim Amin Mahdi_Front-End Developer _resume.pdf"
+                  href="/Omar_Abdelmoneim_Full_Stack_Developer_resume.pdf"
                   download
                   className="border border-white/10 hover:border-red-500/30 px-6 py-2.5 rounded-full font-semibold transition bg-white/5"
                 >
