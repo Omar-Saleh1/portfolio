@@ -305,6 +305,16 @@ const skillsData = {
 // Project Data
 const projects = [
   {
+    title: "Vacuum Gym – Gym Management System",
+    description: "A comprehensive full-stack gym management platform to streamline member registration, subscription tracking, and administrative operations.",
+    detailedDescription: "A comprehensive full-stack gym management system. It features member registration, subscription status tracking, attendance logging, and financial analytics. It includes secure JWT-based authentication and authorization flows, custom RESTful API endpoints for backend data transactions, and a highly responsive admin dashboard rendering real-time metrics and member activities.",
+    image: "/gym.png",
+    github: "https://github.com/Omar-Saleh1/Gym-Management-System-FrontEnd",
+    demo: "https://gym-management-system-front-end.vercel.app",
+    category: "Next.js/React",
+    tags: ["Next.js", "React.js", "Tailwind CSS", "Node.js", "Express.js", "MongoDB", "RESTful APIs", "JWT Auth", "Dashboard Analytics"]
+  },
+  {
     title: "CimaVerse – Cinema Booking App",
     description: "A premium movie discovery and booking platform featuring trailer playback, seat reservation, and dynamic schedules.",
     detailedDescription: "CimaVerse is a complete full-stack cinema booking experience. It features interactive seat maps (with real-time occupancy selection), custom trailer streaming overlay windows, automated booking confirmation records, and responsive schedule filtering. The server manages secure scheduling systems, MongoDB transactions to lock chosen seats during checkout, and REST endpoints for cinema management.",
