@@ -684,7 +684,7 @@ export default function Portfolio() {
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
               Hi, I am <br />
               <span className="bg-gradient-to-r from-red-500 via-rose-500 to-orange-500 bg-clip-text text-transparent font-black">
-                Omar Abdelmonim
+                Omar Abd-Almoniem Amin Mahdy
               </span>
             </h1>
 
@@ -1255,7 +1255,7 @@ export default function Portfolio() {
                 <div className="space-y-4 pt-2">
                   {[
                     { title: "Direct Mail", value: "os6100050@gmail.com", href: "mailto:os6100050@gmail.com", icon: FaEnvelope },
-                    { title: "LinkedIn Network", value: "Omar Abdelmonim", href: "https://www.linkedin.com/in/omar-abdelmoniam-30313b349", icon: FaLinkedin },
+                    { title: "LinkedIn Network", value: "Omar Abd-Almoniem Amin Mahdy", href: "https://www.linkedin.com/in/omar-abdelmoniam-30313b349", icon: FaLinkedin },
                     { title: "GitHub Hub", value: "github.com/Omar-Saleh1", href: "https://github.com/Omar-Saleh1", icon: FaGithub }
                   ].map((info, idx) => (
                     <a 
@@ -1405,7 +1405,7 @@ export default function Portfolio() {
       {/* Footer */}
       <footer className="relative text-center py-8 border-t border-white/5 text-gray-500 text-xs">
         <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p>© {new Date().getFullYear()} Omar Abdelmonim. All Rights Reserved.</p>
+          <p>© {new Date().getFullYear()} Omar Abd-Almoniem Amin Mahdy. All Rights Reserved.</p>
           <div className="flex gap-4">
             <a href="https://github.com/Omar-Saleh1" target="_blank" rel="noopener noreferrer" className="hover:text-red-500 transition-colors">GitHub</a>
             <a href="https://www.linkedin.com/in/omar-abdelmoniam-30313b349" target="_blank" rel="noopener noreferrer" className="hover:text-red-500 transition-colors">LinkedIn</a>

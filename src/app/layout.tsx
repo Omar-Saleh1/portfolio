@@ -15,8 +15,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Omar Abdelmonim | Front-End Developer Portfolio",
-  description: "Explore the modern front-end web development portfolio of Omar Abdelmonim, specializing in React, Next.js, and high-performance interactive interfaces.",
+  title: "Omar Abd-Almoniem Amin Mahdy | Full-Stack Developer Portfolio",
+  description: "Explore the modern full-stack web development portfolio of Omar Abd-Almoniem Amin Mahdy, specializing in React, Next.js, Node.js, and high-performance interactive interfaces.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
